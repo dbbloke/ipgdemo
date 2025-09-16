@@ -1,0 +1,15 @@
+plugin: aws_ec2
+regions:
+  - us-east-1
+hostnames:
+  - tag:Name
+  - private-ip-address
+compose:
+  ansible_host: public_ip_address
+filters:
+  tag:Environment: production
+keyed_groups:
+  - key: tags.Deployment
+    prefix: tag_Deployment_
+  - key: tags.Role
+    prefix: tag_Role_

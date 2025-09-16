@@ -1,0 +1,85 @@
+name: ansible-ci-cd
+
+on:
+  push:
+    paths:
+      - 'ansible/**'
+      - 'scripts/**'
+      - '.github/workflows/app.yml'
+  pull_request:
+    paths:
+      - 'ansible/**'
+      - 'scripts/**'
+      - '.github/workflows/app.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  ansible:
+    if: ${{ vars.ENABLE_ANSIBLE_CICD == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      ANSIBLE_CONFIG: ansible/ansible.cfg
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible==8.5.0 ansible-lint boto3 botocore
+          ansible-galaxy collection install -r ansible/collections/requirements.yml
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Ansible lint
+        run: ansible-lint ansible
+
+      - name: Unit tests
+        run: ansible-playbook ansible/tests/unit.yml --check -i localhost,
+
+      - name: Deploy to green
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          ansible-playbook ansible/playbooks/deploy.yml \
+            -i ansible/inventories/dynamic_aws_ec2.yml \
+            --limit tag_Deployment_green \
+            -e target_color=green
+
+      - name: Smoke tests
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: ./scripts/smoke-test.sh "${{ secrets.ALB_URL }}"
+
+      - name: Switch traffic to green
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          TARGET_COLOR: green
+          ALB_LISTENER_ARN: ${{ secrets.ALB_LISTENER_ARN }}
+          BLUE_TARGET_GROUP_ARN: ${{ secrets.BLUE_TARGET_GROUP_ARN }}
+          GREEN_TARGET_GROUP_ARN: ${{ secrets.GREEN_TARGET_GROUP_ARN }}
+        run: ./scripts/switch-target-group.sh "$TARGET_COLOR"
+
+      - name: Scale down blue ASG
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          BLUE_ASG_NAME: ${{ secrets.BLUE_ASG_NAME }}
+        run: |
+          ansible-playbook ansible/playbooks/decommission.yml \
+            -i localhost, \
+            --limit localhost \
+            -e target_color=blue \
+            -e asg_name=$BLUE_ASG_NAME
