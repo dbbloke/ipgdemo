@@ -1,0 +1,12 @@
+---
+- name: Validate hello_app role
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    target_color: green
+    environment: ci
+  tasks:
+    - name: Include hello_app role
+      ansible.builtin.include_role:
+        name: hello_app

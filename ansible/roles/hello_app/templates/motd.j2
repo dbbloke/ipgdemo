@@ -1,0 +1,5 @@
+***************************************************
+ Welcome to the {{ environment | default('production') }} environment.
+ Active deployment color: {{ target_color | default('green') | upper }}
+ Managed by Ansible on {{ ansible_date_time.date }} at {{ ansible_date_time.time }}
+***************************************************

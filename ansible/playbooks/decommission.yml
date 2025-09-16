@@ -1,0 +1,23 @@
+---
+- name: Scale down inactive Auto Scaling group
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    target_color: "{{ target_color | default('blue') }}"
+  pre_tasks:
+    - name: Validate input variables
+      ansible.builtin.assert:
+        that:
+          - target_color in ['blue', 'green']
+          - asg_name is defined
+        fail_msg: "Provide target_color (blue|green) and asg_name variables."
+  tasks:
+    - name: Scale down Auto Scaling group
+      community.aws.autoscaling_group:
+        name: "{{ asg_name }}"
+        desired_capacity: 0
+        min_size: 0
+        max_size: 0
+        wait_for_instances: true
+        state: present

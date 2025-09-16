@@ -1,0 +1,5 @@
+infrastructure/.terraform/
+infrastructure/.terraform.lock.hcl
+infrastructure/backend.hcl
+*.tfstate
+*.tfstate.*
