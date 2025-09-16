@@ -109,15 +109,22 @@ Actions → New repository secret):
 | `BLUE_ASG_NAME`            | Blue Auto Scaling group name (for scale-down) |
 
 Define the following **repository variables** to avoid hard-coded values in the
-workflow files:
+workflow files and to control when automation is allowed to run:
 
 | Variable name               | Suggested value |
 |-----------------------------|-----------------|
+| `ENABLE_TERRAFORM_CICD`     | `false` (set to `true` once secrets/backends are ready) |
+| `ENABLE_ANSIBLE_CICD`       | `false` (set to `true` once secrets/targets are ready) |
 | `TERRAFORM_ENVIRONMENT`     | `prod` (matches `env/prod.tfvars`) |
 | `TERRAFORM_BACKEND_CONFIG`  | `backend.hcl` (if using remote state file) |
 
-> ℹ️  `TERRAFORM_BACKEND_CONFIG` is optional. When omitted, Terraform will use
-> the local backend. When provided, a file with that name must exist in the
+> ℹ️  Leave `ENABLE_TERRAFORM_CICD` and `ENABLE_ANSIBLE_CICD` at their default
+> `false` until the corresponding secrets, backend files, and target resources
+> exist; the workflows will be skipped instead of failing. Set them to `true`
+> when you are ready for automation to execute.
+>
+> `TERRAFORM_BACKEND_CONFIG` is optional. When omitted, Terraform will use the
+> local backend. When provided, a file with that name must exist in the
 > `infrastructure/` directory (see bootstrapping section above).
 
 If you plan to run the Ansible workflow against a different AWS region or
@@ -161,8 +168,9 @@ use Terraform outputs stored as GitHub secrets to manipulate the load balancer.
 * **Smoke tests** can be extended by editing `scripts/smoke-test.sh` or replacing
   it with a more comprehensive suite (e.g., pytest hitting the ALB URL).
 
-Submit a pull request; GitHub Actions will run the relevant pipeline(s).
-Merging to `main` triggers the automated apply/deploy stages.
+Submit a pull request; once the enablement variables are set to `true`, GitHub
+Actions will run the relevant pipeline(s). Merging to `main` triggers the
+automated apply/deploy stages.
 
 ## Local testing
 

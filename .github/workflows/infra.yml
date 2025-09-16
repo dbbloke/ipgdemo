@@ -9,6 +9,8 @@ on:
     paths:
       - 'infrastructure/**'
       - '.github/workflows/infra.yml'
+  workflow_dispatch:
+
 
 permissions:
   contents: read
@@ -16,6 +18,7 @@ permissions:
 
 jobs:
   terraform:
+    if: ${{ vars.ENABLE_TERRAFORM_CICD == 'true' }}
     name: Terraform plan & apply
     runs-on: ubuntu-latest
     defaults:
