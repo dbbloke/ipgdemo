@@ -107,6 +107,7 @@ Actions → New repository secret):
 | `BLUE_TARGET_GROUP_ARN`    | ARN for the blue target group |
 | `GREEN_TARGET_GROUP_ARN`   | ARN for the green target group |
 | `BLUE_ASG_NAME`            | Blue Auto Scaling group name (for scale-down) |
+| `GREEN_ASG_NAME`           | Green Auto Scaling group name (for manual rollbacks) |
 
 Define the following **repository variables** to avoid hard-coded values in the
 workflow files and to control when automation is allowed to run:
