@@ -1,0 +1,13 @@
+name = "d13mon-pages"
+pages_build_output_dir = "."
+compatibility_date = "2024-10-22"
+
+[vars]
+# STRIPE_PRICE_ID = "price_..." # Optional default price ID
+# STRIPE_SUCCESS_URL = "https://example.com/thank-you"
+# STRIPE_CANCEL_URL = "https://example.com/"
+# CONTACT_TO_EMAIL = "owner@example.com"
+# CONTACT_FROM_EMAIL = "noreply@example.com"
+
+[observability]
+enabled = true
