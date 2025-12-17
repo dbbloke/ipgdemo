@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>d13mon // Digital guardians for your next launch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="logo">d13mon</div>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">Cloudflare Pages + Workers ready</p>
+        <h1>Rebuilt for speed, trust, and fast payments.</h1>
+        <p class="lede">A fresh take on the d13mon experience – deployed on Cloudflare Pages with Workers-backed payments and email notifications.</p>
+        <div class="hero-actions">
+          <button id="paymentButton" data-price="price_SAMPLE">Launch secure checkout</button>
+          <a class="ghost" href="#services">Explore the stack</a>
+        </div>
+        <div class="metrics">
+          <div><span>30ms</span><small>global edge latency target</small></div>
+          <div><span>99.99%</span><small>uptime engineered with Pages</small></div>
+          <div><span>PCI-ready</span><small>Stripe Checkout handoff</small></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="glow"></div>
+        <p class="mono">Cloudflare Workers</p>
+        <h2>API gateway</h2>
+        <ul>
+          <li>Stripe checkout session creation</li>
+          <li>SendGrid-backed email dispatch</li>
+          <li>CORS-safe JSON responses</li>
+        </ul>
+        <div class="badge">pages/functions</div>
+      </div>
+    </section>
+
+    <section class="panel" id="services">
+      <div class="panel-header">
+        <p class="eyebrow">What ships with this repo</p>
+        <h2>Opinionated defaults so you can deploy immediately.</h2>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <h3>Static site rebuilt</h3>
+          <p>Lightweight HTML/CSS inspired by d13mon – optimized for Cloudflare Pages with no external build steps required.</p>
+        </article>
+        <article class="card">
+          <h3>Stripe integration</h3>
+          <p>Workers endpoint sets up a Checkout session using your secret key and redirects visitors to a hosted payment page.</p>
+        </article>
+        <article class="card">
+          <h3>Email notifications</h3>
+          <p>SendGrid-powered contact form keeps conversations flowing to your inbox with reply-to preserved.</p>
+        </article>
+        <article class="card">
+          <h3>Edge deployment</h3>
+          <p>Wrangler config targets Cloudflare Pages, keeping both static assets and APIs in one project.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" id="pricing">
+      <div class="panel-header">
+        <p class="eyebrow">Simple launch plan</p>
+        <h2>One transparent plan to get paid quickly.</h2>
+      </div>
+      <div class="pricing">
+        <div class="price-card">
+          <h3>Creator</h3>
+          <p class="price">$25 <span>/ per launch</span></p>
+          <ul>
+            <li>Stripe Checkout handoff</li>
+            <li>Inbox notifications</li>
+            <li>Edge-cached assets</li>
+            <li>Analytics ready</li>
+          </ul>
+          <button id="pricingPayment" data-price="price_SAMPLE">Start checkout</button>
+        </div>
+        <div class="cta-card">
+          <p class="eyebrow">Need custom?</p>
+          <h3>Workers workflows + KV + durable objects.</h3>
+          <p>Extend payments, subscriptions, or gated content without leaving the edge.</p>
+          <a class="ghost" href="#contact">Talk to us</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="contact">
+      <div class="panel-header">
+        <p class="eyebrow">Talk to a human</p>
+        <h2>Drop a note and we will reply via email.</h2>
+      </div>
+      <form id="contactForm" class="form">
+        <div class="form-row">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" />
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-row">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" placeholder="How can we help?" required></textarea>
+        </div>
+        <button type="submit">Send message</button>
+        <p id="contactStatus" class="status" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>d13mon — deployed on Cloudflare Pages + Workers</p>
+    <div class="footer-links">
+      <a href="mailto:hello@d13mon.com">Email</a>
+      <a href="https://developers.cloudflare.com/pages/" target="_blank" rel="noreferrer">Docs</a>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
